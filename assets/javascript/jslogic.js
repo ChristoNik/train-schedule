@@ -25,8 +25,9 @@ $(document).ready(function(){
     var database = firebase.database();
 
     //2. Button for adding trains
-    $("#submit").on("click", function() {
-
+$("#submit").on("click", function() {
+    //checks if input boxes are blank
+    if ($(".form-control").val().trim() !== "") {
         //capture user input
         var train = $("#trainName").val().trim();
         var dest = $("#destination").val().trim();
@@ -46,19 +47,19 @@ $(document).ready(function(){
         $("#destination").val("");
         $("#firstTrain").val("");
         $("#frequency").val("");
+    } else {
+        alert("Please enter a value!");
+    }
 });
 
     //3. Firebase event to capture train added to database and a row in html when user adds train
 database.ref().on("child_added", function (childSnapshot) {
-    var train = childSnapshot.val().train;
-    var dest = childSnapshot.val().dest;
-    var first = childSnapshot.val().first;
     var freq = childSnapshot.val().freq;
 
         var freq = parseInt(freq);
         //current Time
         var currentTime = moment();
-        var dConverted = moment(childSnapshot.val().time, 'HH:mm').subtract(1, 'years');
+        var dConverted = moment(childSnapshot.val().first, 'HH:mm').subtract(1, 'years');
         var trainTime = moment(dConverted).format('HH:mm');
 
         //difference
